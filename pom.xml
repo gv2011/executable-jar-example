@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.gv2011</groupId>
+		<artifactId>parent-gv</artifactId>
+		<version>0.5.6</version>
+	</parent>
+
+	<artifactId>executable-jar-example</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<description>Classic (classpath in jar) executable jar with dependencies in lib folder.</description>
+	<url>https://github.com/gv2011/executable-jar-example</url>
+
+	<scm>
+		<connection>scm:git:git@github.com:gv2011/executable-jar-example.git</connection>
+		<developerConnection>scm:git:git@github.com:gv2011/executable-jar-example.git</developerConnection>
+		<url>https://github.com/gv2011/executable-jar-example</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<inceptionYear>2020</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>The MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<comments>
+        The license applies to this Maven artifact, its modules and other content within the GIT repository
+        specified in the scm section of this file.
+        The copyright years are given by the inceptionYear tag within this file and by the history of the 
+        GIT repository.
+      </comments>
+		</license>
+	</licenses>
+
+	<properties>
+		<util.version>0.5.6</util.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<classpathLayoutType>repository</classpathLayoutType>
+							<classpathPrefix>lib</classpathPrefix>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.github.gv2011.exjar.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<useRepositoryLayout>true</useRepositoryLayout>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/bin.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<configuration>
+					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
